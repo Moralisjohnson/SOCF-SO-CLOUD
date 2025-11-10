@@ -59,7 +59,7 @@ def info():
             <h1><- Servidor Flask - Integrante -></h1>
             <p><b>Nome:</b> {nome}</p>
             <p>Esse cara de cima realmente sabe de algo.</p>
-            <img src="girl_pic.jpg" alt="info" width="500" height="600">
+            <img src="girl_pic.jpeg" alt="info" width="500" height="600">
         </body>
     </html>
     """
