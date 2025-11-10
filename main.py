@@ -14,6 +14,8 @@ def raiz():
             <h1>Servidor Flask - Página inicial</h1>
             <p><a href='/info'>Ver informações do integrante</a></p>
             <p><a href='/metrics'>Ver métricas do sistema (JSON)</a></p>
+            <p>¿Pode ser que o batman esconda uma receita de bolo de maça?</p>
+            <img src="/static/girl_pic.jpeg" alt="info" width="500" height="600">
         </body>
     </html>
     """
@@ -44,20 +46,9 @@ def conteudo():
 
 @app.route("/info")
 def info():
-    nome = "Guilherme Arcanjo de Morais"
+    dicionario = {"Nome": "Guilherme Arcanjo de Morais"}
 
-    html = f"""
-    <html>
-        <head><title>Informações do Servidor</title></head>
-        <body style="font-family: Arial; background-color: #f0f0f0; padding: 20px;">
-            <h1><- Servidor Flask - Integrante -></h1>
-            <p><b>Nome:</b> {nome}</p>
-            <p>Esse cara de cima realmente sabe de algo.</p>
-            <img src="/static/girl_pic.jpeg" alt="info" width="500" height="600">
-        </body>
-    </html>
-    """
-    return html
+    return jsonify(dicionario)
 
 
 @app.route("/metrics")
