@@ -6,9 +6,21 @@ import psutil
 app = Flask(__name__)
 
 @app.route('/')
-def info():
-    # nome fixo
-    nome = "Guilherme"
+def raiz():
+
+    html = f"""
+    <html>
+        <head><title>Informações do Servidor</title></head>
+        <body style="font-family: Arial; background-color: #f0f0f0; padding: 20px;">
+            <h1>Servidor Flask - Pagina inicial</h1>
+
+        </body>
+    </html>
+    """
+    return html
+
+
+def conteudo():
 
     #obter PID do processo atual
     pid = os.getpid()
@@ -35,6 +47,29 @@ def info():
     </html>
     """
     return html
+
+@app.route("/info")
+def info():
+    nome = "Guilherme Arcanjo de Morais"
+
+    html = f"""
+    <html>
+        <head><title>Informações do Servidor</title></head>
+        <body style="font-family: Arial; background-color: #f0f0f0; padding: 20px;">
+            <h1><- Servidor Flask - Integrante -></h1>
+            <p><b>Nome:</b> {nome}</p>
+            <p>Esse cara de cima realmente sabe de algo.</p>
+            <img src="girl_pic.jpg" alt="info" width="500" height="600">
+        </body>
+    </html>
+    """
+    return html
+
+@app.route("/metrics")
+def metrics():
+    conteudo = conteudo()
+    return conteudo
+    
 
 if __name__ == '__main__':
     # e xecuta o servidor
