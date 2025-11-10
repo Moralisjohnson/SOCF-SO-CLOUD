@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 import os
 import platform
 import psutil
@@ -7,13 +7,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def raiz():
-
-    html = f"""
+    html = """
     <html>
         <head><title>Informações do Servidor</title></head>
         <body style="font-family: Arial; background-color: #f0f0f0; padding: 20px;">
-            <h1>Servidor Flask - Pagina inicial</h1>
-
+            <h1>Servidor Flask - Página inicial</h1>
+            <p><a href='/info'>Ver informações do integrante</a></p>
+            <p><a href='/metrics'>Ver métricas do sistema (JSON)</a></p>
         </body>
     </html>
     """
@@ -21,8 +21,7 @@ def raiz():
 
 
 def conteudo():
-
-    #obter PID do processo atual
+    # Obter PID do processo atual
     pid = os.getpid()
 
     # Obter informações do processo
@@ -30,23 +29,18 @@ def conteudo():
     memoria_mb = processo.memory_info().rss / (1024 * 1024)  # em MB
     cpu_percent = processo.cpu_percent(interval=0.1)  # uso de CPU %
 
-    # sistema operacional
+    # Sistema operacional
     sistema_operacional = platform.system()
 
-    html = f"""
-    <html>
-        <head><title>Informações do Servidor</title></head>
-        <body style="font-family: Arial; background-color: #f0f0f0; padding: 20px;">
-            <h1>Servidor Flask - Informações</h1>
-            <p><b>Nome:</b> {nome}</p>
-            <p><b>PID do processo:</b> {pid}</p>
-            <p><b>Memória utilizada:</b> {memoria_mb:.2f} MB</p>
-            <p><b>Uso de CPU:</b> {cpu_percent:.2f}%</p>
-            <p><b>Sistema operacional:</b> {sistema_operacional}</p>
-        </body>
-    </html>
-    """
-    return html
+    dados = {
+        "pid": pid,
+        "memoria_mb": round(memoria_mb, 2),
+        "cpu_percent": round(cpu_percent, 2),
+        "sistema_operacional": sistema_operacional
+    }
+
+    return jsonify(dados)
+
 
 @app.route("/info")
 def info():
@@ -59,18 +53,17 @@ def info():
             <h1><- Servidor Flask - Integrante -></h1>
             <p><b>Nome:</b> {nome}</p>
             <p>Esse cara de cima realmente sabe de algo.</p>
-            <img src="girl_pic.jpeg" alt="info" width="500" height="600">
+            <img src="/static/girl_pic.jpeg" alt="info" width="500" height="600">
         </body>
     </html>
     """
     return html
 
+
 @app.route("/metrics")
 def metrics():
-    conteudo = conteudo()
-    return conteudo
-    
+    return conteudo()
+
 
 if __name__ == '__main__':
-    # e xecuta o servidor
     app.run(host='0.0.0.0', port=5000, debug=True)
